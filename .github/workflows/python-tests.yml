@@ -1,0 +1,57 @@
+# The MIT License (MIT)
+#
+# Copyright (C) 2025 Fabrício Barros Cabral
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+---
+name: python-tests
+'on':
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  python-tests:
+    name: python-tests
+    runs-on: ubuntu-24.04
+    steps:
+      # Checkout repository
+      - name: Checkout Git repository
+        uses: actions/checkout@v4
+
+      # Install venv and requirements
+      - name: Install venv and requirements
+        run: make install
+
+      # Recreate certificates
+      - name: Recreate certificates
+        # yamllint disable rule:line-length
+        run: |
+          mkdir certificates
+          echo "${{ secrets.SSL_SERVER_KEY }}" | base64 --decode > certificates/server.key
+          echo "${{ secrets.SSL_SERVER_CRT }}" | base64 --decode > certificates/server.crt
+          echo "${{ secrets.SSL_CA_CRT }}" | base64 --decode > certificates/ca.crt
+        # yamllint enable rule:line-length
+        shell: bash
+
+      # Run tests
+      - name: Run tests
+        run: make tests
