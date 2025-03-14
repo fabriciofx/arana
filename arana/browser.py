@@ -31,7 +31,7 @@ from arana.page import Page, PwPage
 
 class Browser(ABC):
     @abstractmethod
-    def open(self, headless: bool = True) -> None:
+    def open(self, *, headless: bool = True) -> None:
         pass
 
     @abstractmethod
@@ -52,7 +52,7 @@ class Chromium(Browser):
         self.__playwright = sync_playwright().start()
         self.__pages: list[Page] = []
 
-    def open(self, headless: bool = True) -> None:
+    def open(self, *, headless: bool = True) -> None:
         self.__rocket = self.__playwright.chromium.launch(headless=headless)
 
     def close(self) -> None:
@@ -75,7 +75,7 @@ class Firefox(Browser):
         self.__playwright = sync_playwright().start()
         self.__pages: list[Page] = []
 
-    def open(self, headless: bool = True) -> None:
+    def open(self, *, headless: bool = True) -> None:
         self.__rocket = self.__playwright.firefox.launch(headless=headless)
 
     def close(self) -> None:
@@ -98,7 +98,7 @@ class Webkit(Browser):
         self.__playwright = sync_playwright().start()
         self.__pages: list[Page] = []
 
-    def open(self, headless: bool = True) -> None:
+    def open(self, *, headless: bool = True) -> None:
         self.__rocket = self.__playwright.webkit.launch(headless=headless)
 
     def close(self) -> None:
@@ -123,10 +123,10 @@ class Logged(Browser):
         self.__origin = browser
         self.__console = console
 
-    def open(self, headless: bool = True) -> None:
+    def open(self, *, headless: bool = True) -> None:
         timestamp = datetime.now().strftime("%H:%M:%S.%f")
         self.__console.log(f"[{timestamp}] Opening browser {self.name()}... ")
-        self.__origin.open(headless)
+        self.__origin.open(headless=headless)
         self.__console.logln("done.")
 
     def close(self) -> None:
@@ -150,8 +150,8 @@ class Headed(Browser):
     def __init__(self, browser: Browser) -> None:
         self.__origin = browser
 
-    def open(self, headless: bool = True) -> None:
-        self.__origin.open(False)
+    def open(self, *, headless: bool = True) -> None:
+        self.__origin.open(headless=False)
 
     def close(self) -> None:
         self.__origin.close()
