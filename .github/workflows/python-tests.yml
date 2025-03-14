@@ -37,6 +37,9 @@ jobs:
       - name: Checkout Git repository
         uses: actions/checkout@v4
 
+      - name: Install libraries to do browsers work
+        run: sudo apt -y install chromium-browser
+
       # Install venv and requirements
       - name: Install venv and requirements
         run: make install
