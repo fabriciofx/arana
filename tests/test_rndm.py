@@ -44,6 +44,7 @@ def test_values_length_1() -> None:
 
 
 def test_values_length_10() -> None:
+    size = 10
     random_int = RandomInt()
     values = random_int.values(1, 10)
-    assert len(values) == 10
+    assert len(values) == size
