@@ -25,7 +25,7 @@ PIP=pip
 RUFF=ruff
 PLAYWRIGHT=playwright
 PYTEST=pytest
-ACTIVATE=source .venv/bin/activate
+ACTIVATE=. .venv/bin/activate
 PLANTUML=plantuml
 
 PLANTUML_OPTS = -tsvg
