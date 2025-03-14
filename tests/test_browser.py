@@ -21,7 +21,7 @@
 # SOFTWARE.
 import re
 
-from arana.browser import Chromium, Firefox, Headed, Logged, Webkit
+from arana.browser import Chromium, Firefox, Logged, Webkit
 from arana.console import FakeConsole
 
 
