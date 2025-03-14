@@ -37,12 +37,13 @@ jobs:
       - name: Checkout Git repository
         uses: actions/checkout@v4
 
-      - name: Install libraries to do browsers work
-        run: sudo apt -y install chromium-browser
-
       # Install venv and requirements
       - name: Install venv and requirements
         run: make install
+
+      # Install playwright dependencies
+      - name: Install playwright dependencies
+        run: playwright install-deps
 
       # Recreate certificates
       - name: Recreate certificates
