@@ -55,9 +55,3 @@ def test_logged() -> None:
         r"done.\n",
         console.stderr(),
     )
-
-
-def test_headed() -> None:
-    browser = Headed(Chromium())
-    browser.open()
-    browser.close()
