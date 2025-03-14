@@ -36,6 +36,7 @@ install:
 	$(PYTHON) -m venv .venv
 	$(ACTIVATE) && $(PIP) install -r requirements.txt
 	$(ACTIVATE) && $(PLAYWRIGHT) install
+	$(ACTIVATE) && $(PLAYWRIGHT) install-deps
 
 tests:
 	$(ACTIVATE) && $(PYTEST)
