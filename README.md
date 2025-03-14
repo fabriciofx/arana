@@ -12,17 +12,15 @@ Chromium, Firefox and WebKit browsers.
 - Provide a strong OOP composition API usage
 - Pass Cloudflare web scrap protection for sites
 
-
 ## How to use
 
 Install it using `pip` command:
 
 ```bash
-$ pip install arana
+pip install arana
 ```
 
 in your project folder.
-
 
 ## Usage
 
