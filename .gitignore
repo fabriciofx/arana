@@ -1,0 +1,9 @@
+.idea/
+.venv/
+.vscode/
+__pycache__/
+build/
+certificates/
+dist/
+arana.egg-info/
+.DS_Store

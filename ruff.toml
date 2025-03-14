@@ -1,0 +1,150 @@
+# The MIT License (MIT)
+#
+# Copyright (C) 2025 Fabrício Barros Cabral
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".idea",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pycache__",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "data",
+    "dist",
+    "docs",
+    "node_modules",
+    "site-packages",
+    "tests/contents",
+    "venv"
+]
+
+# Max line length.
+line-length = 80
+
+# The number of spaces per indentation level (tab).
+indent-width = 4
+
+# Assume Python 3.13.
+target-version = "py313"
+
+# Whether to enable preview mode. When preview mode is enabled, Ruff will use
+# unstable rules, fixes, and formatting.
+preview = true
+
+[analyze]
+# Whether to enable preview mode. When preview mode is enabled, Ruff will
+# expose unstable commands.
+preview = true
+
+[format]
+# Enable auto-formatting of code examples in docstrings. Markdown,
+# reStructuredText code/literal blocks and doctests are all supported.
+#
+# This is currently disabled by default, but it is planned for this
+# to be opt-out in the future.
+docstring-code-format = true
+
+# Set the line length limit used when formatting code snippets in
+# docstrings.
+#
+# This only has an effect when the `docstring-code-format` setting is
+# enabled.
+docstring-code-line-length = 80
+
+# Whether to use spaces or tabs for indentation.
+indent-style = "space"
+
+# The character Ruff uses at the end of a line.
+line-ending = "auto"
+
+# Whether to enable the unstable preview style formatting.
+preview = true
+
+# Configures the preferred quote character for strings. The recommended options
+# are:
+# - double (default): Use double quotes "
+# - single: Use single quotes '
+quote-style = "double"
+
+# Ruff uses existing trailing commas as an indication that short lines should
+# be left separate. If this option is set to true, the magic trailing comma is
+# ignored.
+skip-magic-trailing-comma = false
+
+[lint]
+# A list of rule codes or prefixes to consider fixable. By default, all rules
+# are considered fixable.
+fixable = ["ALL"]
+
+# A list of rule codes or prefixes to ignore. Prefixes can specify exact rules
+# (like F841), entire categories (like F), or anything in between.
+ignore = [
+    "ANN401",
+    "B008",
+    "BLE001",
+    "COM812",
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D107",
+    "D203",
+    "D213",
+    "E501",
+    "N802",
+    "PIE790",
+    "PLR0913",
+    "PLR6301",
+    "S101",
+    "S311",
+    "T201"
+]
+
+# Whether to enable preview mode. When preview mode is enabled, Ruff will use
+# unstable rules and fixes.
+preview = true
+
+# A list of rule codes or prefixes to enable. Prefixes can specify exact rules
+# (like F841), entire categories (like F), or anything in between.
+select = ["ALL"]
+
+# A list of rule codes or prefixes to consider non-fixable.
+unfixable = []

@@ -1,0 +1,137 @@
+@startuml arana
+
+skinparam classAttributeIconSize 0
+hide empty members
+
+interface Element {
+    text(): str
+    texts(): list[str]
+    visible(): bool
+    click(): None
+    nth(index: int): Element
+}
+
+interface Html {
+    element(selector: str, *, has_text: str): Element
+    by_role(role: str, *, name: str): Element
+    by_test_id(test_id: str): Element
+    content(): str
+    evaluate(expression: str): Any
+}
+
+interface Response {
+    status(): int
+    html(): Html
+    url(): str
+}
+
+interface Page {
+    url(): str
+    open(): Response
+    pause(): None
+    close(): None
+    reload(): Response
+    scroll(random_wait: RandomWait): bool
+}
+
+interface Browser {
+    open(headless: bool = True): None
+    close(): None
+    name(): str
+    page(url: str): Page
+}
+
+interface Config {
+    load(): dict[str, Any]
+    save(data: dict[str, Any]): None
+}
+
+interface Console {
+    print(message: str): None
+    println(message: str): None
+    log(message: str): None
+    logln(message: str): None
+    stdout(): str
+    stderr(): str
+}
+
+interface Content {
+    url(): str
+    refine(response: Response): dict[str, Any]
+}
+
+class RandomInt {
+    value(start: int, end: int): int
+    values(start: int, end: int): list[int]
+}
+
+class RandomWait {
+    run(): None
+}
+
+class PwElement
+
+class PwHtml
+
+class PwResponse
+
+class PwPage
+class "Logged" as LoggedPage
+class "Retry" as RetryPage
+
+class Chromium
+class Firefox
+class Webkit
+class Headed
+class "Logged" as LoggedBrowser
+
+class FileConfig
+class FakeConfig
+
+class StdConsole
+class FakeConsole
+
+class ContentText
+class "Logged" as LoggedContent
+class "Retry" as RetryContent
+
+Element <|.. PwElement
+
+Html <|.. PwHtml
+
+Response <|.. PwResponse
+
+Page <|.. PwPage
+Page <|.. LoggedPage
+Page <|.. RetryPage
+
+Browser <|.. Chromium
+Browser <|.. Firefox
+Browser <|.. Webkit
+Browser <|.. LoggedBrowser
+Browser <|.. Headed
+
+Config <|.. FileConfig
+Config <|.. FakeConfig
+
+Console <|.. StdConsole
+Console <|.. FakeConsole
+
+Content <|.. ContentText
+Content <|.. LoggedContent
+Content <|.. RetryContent
+
+Element <.. Html
+Response <.. Page
+Page <.. Browser
+RandomWait <.. Page
+RandomInt <.. Page
+
+Response <.. Content
+Html <-- Response
+
+Console <-- LoggedBrowser
+Console <-- LoggedPage
+Console <-- LoggedContent
+
+@enduml

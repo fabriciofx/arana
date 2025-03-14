@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "arana"
+version = "0.0.1"
+description = "Abstraction layer for web scrapers"
+authors = [{ name = "Fabrício Barros Cabral", email = "fabriciofx@gmail.com" }]
+readme = "README.md"
+license = { file = "LICENSE" }
+keywords = ["web", "scraper", "playwright", "scrapy", "scraping", "browserforge"]
+dependencies = [
+    "playwright",
+    "browserforge"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/fabriciofx/arana"
+"Bug Tracker" = "https://github.com/fabriciofx/arana/issues"
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[tool.setuptools]
+packages = ["arana"]
