@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 from abc import ABC, abstractmethod
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from arana.browser import Browser
@@ -63,7 +63,8 @@ class Logged(Content):
         return self.__origin.url()
 
     def refine(self, response: Response) -> dict[str, Any]:
-        timestamp = datetime.now().strftime("%H:%M:%S.%f")
+        zone = timezone(timedelta(hours=-3))
+        timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
         self.__console.log(f"[{timestamp}] Refining '{self.url()}'... ")
         data = self.__origin.refine(response)
         self.__console.logln("done.")

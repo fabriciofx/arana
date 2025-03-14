@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 from abc import ABC, abstractmethod
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from browserforge.fingerprints import FingerprintGenerator
 from browserforge.injectors.playwright import NewContext
@@ -123,32 +123,37 @@ class Logged(Page):
         return self.__origin.url()
 
     def open(self) -> Response:
-        timestamp = datetime.now().strftime("%H:%M:%S.%f")
+        zone = timezone(timedelta(hours=-3))
+        timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
         self.__console.log(f"[{timestamp}] Opening '{self.url()}'... ")
         response = self.__origin.open()
         self.__console.logln("done.")
         return response
 
     def pause(self) -> None:
-        timestamp = datetime.now().strftime("%H:%M:%S.%f")
+        zone = timezone(timedelta(hours=-3))
+        timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
         self.__console.logln(f"[{timestamp}] Page paused!")
         self.__origin.pause()
 
     def close(self) -> None:
-        timestamp = datetime.now().strftime("%H:%M:%S.%f")
+        zone = timezone(timedelta(hours=-3))
+        timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
         self.__console.log(f"[{timestamp}] Closing '{self.url()}'... ")
         self.__origin.close()
         self.__console.logln("done.")
 
     def reload(self) -> Response:
-        timestamp = datetime.now().strftime("%H:%M:%S.%f")
+        zone = timezone(timedelta(hours=-3))
+        timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
         self.__console.log(f"[{timestamp}] Reloading '{self.url()}'... ")
         response = self.__origin.reload()
         self.__console.logln("done.")
         return response
 
     def scroll(self, random_wait: RandomWait) -> bool:
-        timestamp = datetime.now().strftime("%H:%M:%S.%f")
+        zone = timezone(timedelta(hours=-3))
+        timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
         self.__console.log(f"[{timestamp}] Scrolling '{self.url()}'... ")
         state = self.__origin.scroll(random_wait)
         self.__console.logln("done.")

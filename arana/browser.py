@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 from abc import ABC, abstractmethod
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from playwright.sync_api import sync_playwright
 
@@ -124,13 +124,15 @@ class Logged(Browser):
         self.__console = console
 
     def open(self, *, headless: bool = True) -> None:
-        timestamp = datetime.now().strftime("%H:%M:%S.%f")
+        zone = timezone(timedelta(hours=-3))
+        timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
         self.__console.log(f"[{timestamp}] Opening browser {self.name()}... ")
         self.__origin.open(headless=headless)
         self.__console.logln("done.")
 
     def close(self) -> None:
-        timestamp = datetime.now().strftime("%H:%M:%S.%f")
+        zone = timezone(timedelta(hours=-3))
+        timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
         self.__console.log(f"[{timestamp}] Closing browser {self.name()}... ")
         self.__origin.close()
         self.__console.logln("done.")
@@ -139,7 +141,8 @@ class Logged(Browser):
         return self.__origin.name()
 
     def page(self, url: str) -> Page:
-        timestamp = datetime.now().strftime("%H:%M:%S.%f")
+        zone = timezone(timedelta(hours=-3))
+        timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
         self.__console.log(f"[{timestamp}] Creating a new page... ")
         page = arana.page.Logged(self.__origin.page(url), self.__console)
         self.__console.logln("done.")
