@@ -52,7 +52,7 @@ def test_logged() -> None:
         r"\[[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}] Opening browser Chromium... "
         r"done.\n"
         r"\[[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}] Closing browser Chromium... "
-        "done.\n",
+        r"done.\n",
         console.stderr(),
     )
 
