@@ -117,6 +117,7 @@ fixable = ["ALL"]
 # (like F841), entire categories (like F), or anything in between.
 ignore = [
     "ANN401",
+    "ARG002",
     "B008",
     "BLE001",
     "COM812",
