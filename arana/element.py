@@ -21,9 +21,11 @@
 # SOFTWARE.
 from __future__ import annotations
 
-from playwright.sync_api import Locator
-
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from playwright.sync_api import Locator
 
 
 class Element(ABC):

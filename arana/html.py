@@ -20,7 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 from abc import ABC, abstractmethod
-from typing import Any, Pattern
+from re import Pattern
+from typing import Any
 
 from playwright.sync_api import Page as Pwpg
 

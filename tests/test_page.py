@@ -20,16 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import re
+
+from fake_https_server.request import ContentGet, Fail, FileContentGet
+from fake_https_server.server import Daemon, FakeHttpsServer
+
 import arana.browser
 import arana.page
-
 from arana.browser import Chromium
-
-from arana.rndm import RandomWait
 from arana.console import FakeConsole
-
-from fake_https_server.request import ContentGet, FileContentGet, Fail
-from fake_https_server.server import FakeHttpsServer, Daemon
+from arana.rndm import RandomWait
 
 
 def test_url() -> None:

@@ -19,16 +19,14 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import arana.page
-
 from abc import ABC, abstractmethod
 from datetime import datetime
 
 from playwright.sync_api import sync_playwright
 
-from arana.console import Console
+import arana.page
+from arana.console import Console, StdConsole
 from arana.page import Page, PwPage
-from arana.console import StdConsole
 
 
 class Browser(ABC):

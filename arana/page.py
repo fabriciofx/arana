@@ -19,16 +19,16 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+from abc import ABC, abstractmethod
+from datetime import datetime
+
 from browserforge.fingerprints import FingerprintGenerator
 from browserforge.injectors.playwright import NewContext
 from playwright.sync_api import Browser as Rocket
 
-from abc import ABC, abstractmethod
-from datetime import datetime
-
 from arana.console import Console, StdConsole
 from arana.html import PwHtml
-from arana.response import Response, PwResponse
+from arana.response import PwResponse, Response
 from arana.rndm import RandomInt, RandomWait
 
 

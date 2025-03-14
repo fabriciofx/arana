@@ -22,7 +22,6 @@
 import random
 import time
 
-
 """Generate random integer numbers."""
 
 
