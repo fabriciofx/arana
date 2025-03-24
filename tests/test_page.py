@@ -60,7 +60,9 @@ def test_scroll() -> None:
     browser = Chromium()
     browser.open()
     server.start()
-    url = f"https://localhost:{server.port()}/aluguel/galpao-deposito-armazem/sp/"
+    url = (
+        f"https://localhost:{server.port()}/aluguel/galpao-deposito-armazem/sp/"
+    )
     page = browser.page(url)
     response = page.open()
     done = page.scroll(RandomWait(0, 0))
