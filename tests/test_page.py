@@ -50,7 +50,6 @@ def test_not_open() -> None:
 
 def test_scroll() -> None:
     success_ok = 200
-    url = "https://localhost:8443/aluguel/galpao-deposito-armazem/sp/"
     server = Daemon(
         FakeHttpsServer(
             FileContentGet(
@@ -61,6 +60,7 @@ def test_scroll() -> None:
     browser = Chromium()
     browser.open()
     server.start()
+    url = f"https://localhost:{server.port()}/aluguel/galpao-deposito-armazem/sp/"
     page = browser.page(url)
     response = page.open()
     done = page.scroll(RandomWait(0, 0))
@@ -72,11 +72,6 @@ def test_scroll() -> None:
 
 
 def test_logged() -> None:
-    url = (
-        "https://localhost:8443/imovel/aluguel-galpao-deposito"
-        "-armazem-com-cozinha-jardim-arpoador-zona-oeste-zona-oeste"
-        "-sao-paulo-sp-250m2-id-2743779110/"
-    )
     server = Daemon(
         FakeHttpsServer(
             FileContentGet("tests/contents/armazem-arpoador-sp.html"),
@@ -86,6 +81,12 @@ def test_logged() -> None:
     browser = Chromium()
     browser.open()
     server.start()
+    port = server.port()
+    url = (
+        f"https://localhost:{port}/imovel/aluguel-galpao-deposito"
+        f"-armazem-com-cozinha-jardim-arpoador-zona-oeste-zona-oeste"
+        f"-sao-paulo-sp-250m2-id-2743779110/"
+    )
     page = arana.page.Logged(browser.page(url), console)
     page.open()
     page.close()
@@ -93,11 +94,11 @@ def test_logged() -> None:
     server.stop()
     assert re.search(
         r"\[[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}] Opening "
-        r"'https://localhost:8443/imovel/aluguel-galpao-deposito-armazem-com-"
+        f"'https://localhost:{port}/imovel/aluguel-galpao-deposito-armazem-com-"
         r"cozinha-jardim-arpoador-zona-oeste-zona-oeste-sao-paulo-sp-250m2-id-"
         r"2743779110/'... done.\n"
         r"\[[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}] Closing "
-        r"'https://localhost:8443/imovel/aluguel-galpao-deposito-armazem-com-"
+        f"'https://localhost:{port}/imovel/aluguel-galpao-deposito-armazem-com-"
         r"cozinha-jardim-arpoador-zona-oeste-zona-oeste-sao-paulo-sp-250m2-id-"
         r"2743779110/'... done.\n",
         console.stderr(),
@@ -108,7 +109,6 @@ def test_retry() -> None:
     success_ok = 200
     retries = 1
     msg = "Retry Page Test!"
-    url = "https://localhost:8443/index.html"
     server = Daemon(
         FakeHttpsServer(
             Fail(
@@ -120,6 +120,7 @@ def test_retry() -> None:
     browser = Chromium()
     browser.open()
     server.start()
+    url = f"https://localhost:{server.port()}/index.html"
     page = arana.page.Retry(browser.page(url))
     response = page.open()
     assert response.status() == success_ok
@@ -136,7 +137,6 @@ def test_retry_logged() -> None:
     success_ok = 200
     retries = 1
     msg = "Retry Page Test!"
-    url = "https://localhost:8443/index.html"
     server = Daemon(
         FakeHttpsServer(
             Fail(
@@ -148,6 +148,7 @@ def test_retry_logged() -> None:
     browser = arana.browser.Logged(Chromium())
     browser.open()
     server.start()
+    url = f"https://localhost:{server.port()}/index.html"
     page = arana.page.Retry(browser.page(url))
     response = page.open()
     assert response.status() == success_ok

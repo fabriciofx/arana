@@ -28,12 +28,12 @@ from arana.content import ContentText
 
 def test_refine() -> None:
     success_ok = 200
-    url = "https://localhost:8443"
     text = "It works!"
     browser = Chromium()
     browser.open()
     server = Daemon(FakeHttpsServer(ContentGet(text)))
     server.start()
+    url = f"https://localhost:{server.port()}"
     page = browser.page(url)
     response = page.open()
     result = ContentText(url).refine(response)
