@@ -8,10 +8,14 @@ version = "0.0.3"
 description = "Abstraction layer for web scrapers"
 authors = [{ name = "Fabrício Barros Cabral", email = "fabriciofx@gmail.com" }]
 readme = "README.md"
-license = { file = "LICENSE" }
-keywords = ["web", "scraper", "playwright", "scrapy", "scraping", "browserforge"]
-dependencies = [
+license = "MIT"
+dependencies = ["playwright", "browserforge"]
+keywords = [
+    "web",
+    "scraper",
     "playwright",
+    "scrapy",
+    "scraping",
     "browserforge"
 ]
 
