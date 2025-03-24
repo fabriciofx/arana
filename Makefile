@@ -30,7 +30,7 @@ PLANTUML=plantuml
 
 PLANTUML_OPTS = -tsvg
 
-.PHONY: install tests lint format diagrams
+.PHONY: install tests lint format diagrams clean
 
 install:
 	$(PYTHON) -m venv .venv
@@ -49,3 +49,10 @@ format:
 
 diagrams:
 	$(PLANTUML) $(PLANTUML_OPTS) docs/*.puml
+
+clean:
+	rm -rf .venv dist *.egg-info
+	find . -type d -name "*.pyc" -exec rm -r {} +
+	find . -type d -name "__pycache__" -exec rm -r {} +
+	find . -type d -name ".ruff_cache" -exec rm -r {} +
+	find . -type d -name ".pytest_cache" -exec rm -r {} +
