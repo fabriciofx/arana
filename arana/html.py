@@ -83,4 +83,4 @@ class PwHtml(Html):
         return self.__pwpg.evaluate(expression)
 
     def frame(self, selector: str) -> Frame:
-        return PwFrame(self.__pwpg.locator(selector).frame_locator())
+        return PwFrame(self.__pwpg.frame_locator(selector))
