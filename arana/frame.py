@@ -21,15 +21,13 @@
 # SOFTWARE.
 from abc import ABC, abstractmethod
 from re import Pattern
-from typing import Any
 
-from playwright.sync_api import Page as Pwpg
+from playwright.sync_api import FrameLocator
 
 from arana.element import Element, PwElement
-from arana.frame import Frame, PwFrame
 
 
-class Html(ABC):
+class Frame(ABC):
     @abstractmethod
     def element(
         self, selector: str, *, has_text: str | Pattern[str] | None = None
@@ -46,41 +44,20 @@ class Html(ABC):
     def by_test_id(self, test_id: str) -> Element:
         pass
 
-    @abstractmethod
-    def content(self) -> str:
-        pass
 
-    @abstractmethod
-    def evaluate(self, expression: str) -> Any:
-        pass
-
-    @abstractmethod
-    def frame(self, selector: str) -> Frame:
-        pass
-
-
-class PwHtml(Html):
-    def __init__(self, pwpg: Pwpg) -> None:
-        self.__pwpg = pwpg
+class PwFrame(Frame):
+    def __init__(self, frame: FrameLocator) -> None:
+        self.__frame = frame
 
     def element(
         self, selector: str, *, has_text: str | Pattern[str] | None = None
     ) -> Element:
-        return PwElement(self.__pwpg.locator(selector, has_text=has_text))
+        return PwElement(self.__frame.locator(selector, has_text=has_text))
 
     def by_role(
         self, role: str, *, name: str | Pattern[str] | None = None
     ) -> Element:
-        return PwElement(self.__pwpg.get_by_role(role=role, name=name))
+        return PwElement(self.__frame.get_by_role(role=role, name=name))
 
     def by_test_id(self, test_id: str) -> Element:
-        return PwElement(self.__pwpg.get_by_test_id(test_id))
-
-    def content(self) -> str:
-        return self.__pwpg.content()
-
-    def evaluate(self, expression: str) -> Any:
-        return self.__pwpg.evaluate(expression)
-
-    def frame(self, selector: str) -> Frame:
-        return PwFrame(self.__pwpg.locator(selector).frame_locator())
+        return PwElement(self.__frame.get_by_test_id(test_id))
