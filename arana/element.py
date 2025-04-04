@@ -53,6 +53,10 @@ class Element(ABC):
     def nth(self, index: int) -> Element:
         pass
 
+    @abstractmethod
+    def attribute(self, name: str) -> str:
+        pass
+
 
 class PwElement(Element):
     def __init__(self, locator: Locator) -> None:
@@ -80,3 +84,6 @@ class PwElement(Element):
 
     def nth(self, index: int) -> Element:
         return PwElement(self.__locator.nth(index))
+
+    def attribute(self, name: str) -> str:
+        return self.__locator.get_attribute(name)
