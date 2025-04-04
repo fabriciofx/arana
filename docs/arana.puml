@@ -11,12 +11,19 @@ interface Element {
     nth(index: int): Element
 }
 
+interface Frame {
+    element(selector: str, *, has_text: str): Element
+    by_role(role: str, *, name: str): Element
+    by_test_id(test_id: str): Element
+}
+
 interface Html {
     element(selector: str, *, has_text: str): Element
     by_role(role: str, *, name: str): Element
     by_test_id(test_id: str): Element
     content(): str
     evaluate(expression: str): Any
+    frame(selector: str): Frame
 }
 
 interface Response {
@@ -71,6 +78,8 @@ class RandomWait {
 
 class PwElement
 
+class PwFrame
+
 class PwHtml
 
 class PwResponse
@@ -97,6 +106,8 @@ class "Retry" as RetryContent
 
 Element <|.. PwElement
 
+Frame <|.. PwFrame
+
 Html <|.. PwHtml
 
 Response <|.. PwResponse
@@ -121,6 +132,7 @@ Content <|.. ContentText
 Content <|.. LoggedContent
 Content <|.. RetryContent
 
+Frame <.. Html
 Element <.. Html
 Response <.. Page
 Page <.. Browser
