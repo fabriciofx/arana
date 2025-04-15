@@ -9,7 +9,11 @@ description = "Abstraction layer for web scrapers"
 authors = [{ name = "Fabrício Barros Cabral", email = "fabriciofx@gmail.com" }]
 readme = "README.md"
 license = "MIT"
-dependencies = ["playwright", "browserforge"]
+dependencies = [
+    "playwright",
+ "browserforge",
+ "fake-https-server>=0.0.7",
+]
 keywords = [
     "web",
     "scraper",
