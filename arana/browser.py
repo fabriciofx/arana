@@ -19,9 +19,13 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-from abc import ABC, abstractmethod
-from datetime import datetime, timedelta, timezone
 
+from collections.abc import Generator
+from contextlib import contextmanager
+from datetime import datetime, timedelta, timezone
+from typing import Literal, Protocol
+
+from playwright.sync_api import Browser as Rocket
 from playwright.sync_api import sync_playwright
 
 import arana.page
@@ -29,124 +33,104 @@ from arana.console import Console, StdConsole
 from arana.page import Page, PwPage
 
 
-class Browser(ABC):
-    @abstractmethod
+class Browser(Protocol):
+    def open(self, *, headless: bool = True) -> None: ...
+
+    def close(self) -> None: ...
+
+    def name(self) -> str: ...
+
+    def page(self, url: str) -> Page: ...
+
+
+BrowserType = Literal["chromium", "firefox", "webkit"]
+
+
+class InvalidBrowserStateError(Exception):
+    def __init__(self, message: str) -> None:
+        self.__message = f"Invalid browser state: {message}"
+
+
+class GenericBrowser(Browser):
+    def __init__(self, name: str, browser_type: BrowserType) -> None:
+        self._playwright = sync_playwright().start()
+        self._pages: list[Page] = []
+        self._name = name
+        self._browser_type = browser_type
+        self._rocket: Rocket | None = None
+        self._browser_launcher = getattr(self._playwright, self._browser_type)
+
     def open(self, *, headless: bool = True) -> None:
-        pass
-
-    @abstractmethod
-    def close(self) -> None:
-        pass
-
-    @abstractmethod
-    def name(self) -> str:
-        pass
-
-    @abstractmethod
-    def page(self, url: str) -> Page:
-        pass
-
-
-class Chromium(Browser):
-    def __init__(self) -> None:
-        self.__playwright = sync_playwright().start()
-        self.__pages: list[Page] = []
-
-    def open(self, *, headless: bool = True) -> None:
-        self.__rocket = self.__playwright.chromium.launch(headless=headless)
+        self._rocket = self._browser_launcher.launch(headless=headless)
 
     def close(self) -> None:
-        for page in self.__pages:
+        for page in self._pages:
             page.close()
-        self.__rocket.close()
-        self.__playwright.stop()
+        if self._rocket:
+            self._rocket.close()
+        self._playwright.stop()
 
     def name(self) -> str:
-        return "Chromium"
+        return self._name
 
     def page(self, url: str) -> Page:
-        page = PwPage(self.__rocket, url)
-        self.__pages.append(page)
-        return page
+        if self._rocket:
+            page = PwPage(self._rocket, url)
+            self._pages.append(page)
+            return page
+        error = "not opened"
+        raise InvalidBrowserStateError(error)
 
 
-class Firefox(Browser):
+class Chromium(GenericBrowser):
+
     def __init__(self) -> None:
-        self.__playwright = sync_playwright().start()
-        self.__pages: list[Page] = []
-
-    def open(self, *, headless: bool = True) -> None:
-        self.__rocket = self.__playwright.firefox.launch(headless=headless)
-
-    def close(self) -> None:
-        for page in self.__pages:
-            page.close()
-        self.__rocket.close()
-        self.__playwright.stop()
-
-    def name(self) -> str:
-        return "Firefox"
-
-    def page(self, url: str) -> Page:
-        page = PwPage(self.__rocket, url)
-        self.__pages.append(page)
-        return page
+        super().__init__("Chromium", "chromium")
 
 
-class Webkit(Browser):
+class Firefox(GenericBrowser):
+
     def __init__(self) -> None:
-        self.__playwright = sync_playwright().start()
-        self.__pages: list[Page] = []
+        super().__init__("Firefox", "firefox")
 
-    def open(self, *, headless: bool = True) -> None:
-        self.__rocket = self.__playwright.webkit.launch(headless=headless)
 
-    def close(self) -> None:
-        for page in self.__pages:
-            page.close()
-        self.__rocket.close()
-        self.__playwright.stop()
+class Webkit(GenericBrowser):
 
-    def name(self) -> str:
-        return "Webkit"
-
-    def page(self, url: str) -> Page:
-        page = PwPage(self.__rocket, url)
-        self.__pages.append(page)
-        return page
+    def __init__(self) -> None:
+        super().__init__("Webkit", "webkit")
 
 
 class Logged(Browser):
-    def __init__(
-        self, browser: Browser, console: Console = StdConsole()
-    ) -> None:
+    def __init__(self, browser: Browser, console: Console = StdConsole()) -> None:
         self.__origin = browser
         self.__console = console
+        self.zone = timezone(
+            timedelta(hours=-3)
+        )  # A better solution would be to get the time zone from the configuration or use the local time
+
+    def timestamp(self) -> str:
+        return datetime.now(self.zone).strftime("%H:%M:%S.%f")
+
+    @contextmanager
+    def work(self, message: str) -> Generator:
+        self.__console.log(f"[{self.timestamp()}] {message}... ")
+        yield
+        self.__console.logln("done.")
 
     def open(self, *, headless: bool = True) -> None:
-        zone = timezone(timedelta(hours=-3))
-        timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
-        self.__console.log(f"[{timestamp}] Opening browser {self.name()}... ")
-        self.__origin.open(headless=headless)
-        self.__console.logln("done.")
+        with self.work(f"Opening browser {self.name()}"):
+            self.__origin.open(headless=headless)
 
     def close(self) -> None:
-        zone = timezone(timedelta(hours=-3))
-        timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
-        self.__console.log(f"[{timestamp}] Closing browser {self.name()}... ")
-        self.__origin.close()
-        self.__console.logln("done.")
+        with self.work(f"Closing browser {self.name()}"):
+            self.__origin.close()
 
     def name(self) -> str:
         return self.__origin.name()
 
     def page(self, url: str) -> Page:
-        zone = timezone(timedelta(hours=-3))
-        timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
-        self.__console.log(f"[{timestamp}] Creating a new page... ")
-        page = arana.page.Logged(self.__origin.page(url), self.__console)
-        self.__console.logln("done.")
-        return page
+        with self.work("Creating a new page"):
+            return arana.page.Logged(self.__origin.page(url), self.__console)
 
 
 class Headed(Browser):

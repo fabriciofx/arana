@@ -35,9 +35,7 @@ class Frame(ABC):
         pass
 
     @abstractmethod
-    def by_role(
-        self, role: str, *, name: str | Pattern[str] | None = None
-    ) -> Element:
+    def by_role(self, role: str, *, name: str | Pattern[str] | None = None) -> Element:
         pass
 
     @abstractmethod
@@ -54,9 +52,7 @@ class PwFrame(Frame):
     ) -> Element:
         return PwElement(self.__frame.locator(selector, has_text=has_text))
 
-    def by_role(
-        self, role: str, *, name: str | Pattern[str] | None = None
-    ) -> Element:
+    def by_role(self, role: str, *, name: str | Pattern[str] | None = None) -> Element:
         return PwElement(self.__frame.get_by_role(role=role, name=name))
 
     def by_test_id(self, test_id: str) -> Element:

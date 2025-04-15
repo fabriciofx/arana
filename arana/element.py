@@ -54,7 +54,7 @@ class Element(ABC):
         pass
 
     @abstractmethod
-    def attribute(self, name: str) -> str:
+    def attribute(self, name: str) -> str | None:
         pass
 
 
@@ -85,5 +85,5 @@ class PwElement(Element):
     def nth(self, index: int) -> Element:
         return PwElement(self.__locator.nth(index))
 
-    def attribute(self, name: str) -> str:
+    def attribute(self, name: str) -> str | None:
         return self.__locator.get_attribute(name)

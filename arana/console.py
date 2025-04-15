@@ -90,17 +90,19 @@ class StdConsole(Console):
         """
         print(message, flush=True, file=sys.stderr)
 
+    @staticmethod
     def stdout() -> str:
         return ""
 
+    @staticmethod
     def stderr() -> str:
         return ""
 
 
 class FakeConsole(Console):
     def __init__(self) -> None:
-        self.__stdout = []
-        self.__stderr = []
+        self.__stdout: list[str] = []
+        self.__stderr: list[str] = []
 
     def print(self, message: str) -> None:
         self.__stdout.append(message)
