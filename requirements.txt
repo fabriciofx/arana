@@ -11,6 +11,7 @@ click-completion==0.5.2
 colorama==0.4.6
 crayons==0.4.0
 dill==0.3.9
+execnet==2.1.1
 fake_https_server==0.0.7
 greenlet==3.1.1
 h11==0.14.0
@@ -39,6 +40,7 @@ pylint==3.3.6
 pytest==8.3.5
 pytest-base-url==2.1.0
 pytest-playwright==0.7.0
+pytest-xdist==3.6.1
 python-slugify==8.0.4
 random_port==0.0.4
 requests==2.32.3

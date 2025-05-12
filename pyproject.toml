@@ -28,3 +28,8 @@ dev = ["pytest", "ruff"]
 
 [tool.setuptools]
 packages = ["arana"]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--numprocesses=auto",
+]
