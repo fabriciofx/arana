@@ -37,7 +37,9 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: DavidAnson/markdownlint-cli2-action@v19
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Lint Markdown files
+        uses: DavidAnson/markdownlint-cli2-action@v19
         with:
           globs: '**/*.md'

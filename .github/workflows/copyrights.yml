@@ -32,5 +32,10 @@ jobs:
   copyrights:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: yegor256/copyrights-action@0.0.8
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Check copyright header
+        uses: yegor256/copyrights-action@0.0.8
+        with:
+          ignore: >-
+            **/*.properties

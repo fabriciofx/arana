@@ -33,18 +33,18 @@ jobs:
     name: python-format
     runs-on: ubuntu-24.04
     steps:
-      # Checkout repository
-      - name: Checkout Git repository
+      - name: Checkout code
         uses: actions/checkout@v4
-
-      # Install venv and requirements
       - name: Install venv and requirements
-        run: make install
-
-      # Install formatter
-      - name: Install ruff
+        # yamllint disable rule:line-length
+        run: |
+          if [ -f Makefile ]; then
+            make install
+          else
+            python -m venv .venv && . ./.venv/bin/activate && pip install -r requirements.txt
+          fi
+        # yamllint enable rule:line-length
+      - name: Download and install ruff
         run: pip install ruff
-
-      # Check if code is formatted
       - name: Check format
         run: ruff format --check

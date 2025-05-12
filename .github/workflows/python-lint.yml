@@ -33,18 +33,18 @@ jobs:
     name: python-lint
     runs-on: ubuntu-24.04
     steps:
-      # Checkout repository
-      - name: Checkout Git repository
+      - name: Checkout code
         uses: actions/checkout@v4
-
-      # Install venv and requirements
       - name: Install venv and requirements
-        run: make install
-
-      # Install linter
+        # yamllint disable rule:line-length
+        run: |
+          if [ -f Makefile ]; then
+            make install
+          else
+            python -m venv .venv && . ./.venv/bin/activate && pip install -r requirements.txt
+          fi
+        # yamllint enable rule:line-length
       - name: Install ruff
         run: pip install ruff
-
-      # Run lint
-      - name: Run lint
-        run: make lint
+      - name: Lint Python files
+        run: ruff check

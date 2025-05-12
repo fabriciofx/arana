@@ -32,8 +32,9 @@ jobs:
   action-lint:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - name: Download actionlint
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Download and installs actionlint
         id: get_actionlint
         # yamllint disable-line rule:line-length
         run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)

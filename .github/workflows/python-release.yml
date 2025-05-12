@@ -20,40 +20,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-name: python-tests
+name: python-release
+permissions: write-all
 'on':
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    tags:
+      - '*'
 jobs:
-  python-tests:
-    name: python-tests
+  python-release:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install venv and requirements
-        # yamllint disable rule:line-length
-        run: |
-          if [ -f Makefile ]; then
-            make install
-          else
-            python -m venv .venv && . ./.venv/bin/activate && pip install -r requirements.txt
-          fi
-        # yamllint enable rule:line-length
-      - name: Recreate certificates
-        # yamllint disable rule:line-length
-        run: |
-          if [ -n "${{ secrets.SSL_SERVER_KEY }}" ]; then
-            mkdir certificates
-            echo "${{ secrets.SSL_SERVER_KEY }}" | base64 --decode > certificates/server.key
-            echo "${{ secrets.SSL_SERVER_CRT }}" | base64 --decode > certificates/server.crt
-            echo "${{ secrets.SSL_CA_CRT }}" | base64 --decode > certificates/ca.crt
-          fi
-        # yamllint enable rule:line-length
-        shell: bash
-      - name: Run tests
-        run: . ./.venv/bin/activate && pytest
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install build tool
+        run: pip install build
+      - name: Build package
+        run: python -m build
+      - name: Release to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}

@@ -20,37 +20,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-name: Build and Release Python Package
-permissions: write-all
+name: typos
 'on':
   push:
-    tags:
-      - '*'
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 jobs:
-  build:
-    name: build-and-release
+  typos:
+    timeout-minutes: 15
     runs-on: ubuntu-24.04
     steps:
-      # Checks-out your repository
-      - name: Set up Git repository
+      - name: Checkout code
         uses: actions/checkout@v4
-
-      # Set up Python
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-
-      # Install build package
-      - name: Install build tool
-        run: pip install build
-
-      # Build package
-      - name: Build package
-        run: python -m build
-
-      # Publishes to PyPI
-      - name: Make release
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Check files for typos
+        uses: crate-ci/typos@v1.32.0
