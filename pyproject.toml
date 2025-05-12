@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "arana"
-version = "0.0.7"
+version = "0.0.8"
 description = "Abstraction layer for web scrapers"
 authors = [{ name = "Fabrício Barros Cabral", email = "fabriciofx@gmail.com" }]
 readme = "README.md"
