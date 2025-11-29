@@ -20,32 +20,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-PYTHON=python
-PIP=pip
-RUFF=ruff
-PLAYWRIGHT=playwright
-PYTEST=pytest
-ACTIVATE=. .venv/bin/activate
 PLANTUML=plantuml
-
 PLANTUML_OPTS = -tsvg
 
 .PHONY: install tests lint format diagrams clean
 
 install:
-	$(PYTHON) -m venv .venv
-	$(ACTIVATE) && $(PIP) install -r requirements.txt
-	$(ACTIVATE) && $(PLAYWRIGHT) install-deps
-	$(ACTIVATE) && $(PLAYWRIGHT) install
+	uv sync
+	uv run playwright install-deps
+	uv run playwright install
 
 tests:
-	$(ACTIVATE) && $(PYTEST)
+	uv run pytest
 
 lint:
-	$(ACTIVATE) && $(RUFF) check .
+	uv run ruff check .
 
 format:
-	$(ACTIVATE) && $(RUFF) format .
+	uv run ruff format .
 
 diagrams:
 	$(PLANTUML) $(PLANTUML_OPTS) docs/*.puml
