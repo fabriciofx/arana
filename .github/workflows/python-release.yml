@@ -25,10 +25,8 @@ jobs:
         with:
           python-version: '3.14'
       - name: Install uv
-        working-directory: ${{ inputs.working-directory }}
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
       - name: Build package
-        working-directory: ${{ inputs.working-directory }}
         run: |
           if [[ -s uv.lock ]]; then
             uv build
@@ -36,7 +34,7 @@ jobs:
             python -m build
           fi
       - name: Release to PyPI
+        # yamllint disable-line rule:line-length
         uses: pypa/gh-action-pypi-publish@3317ede93a4981d0fc490510c6fcf8bf0e92ed05
         with:
-          packages-dir: ${{ inputs.working-directory }}
           verbose: true
