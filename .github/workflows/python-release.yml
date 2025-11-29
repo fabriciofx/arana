@@ -14,5 +14,29 @@ permissions:
   contents: read
 jobs:
   python-release:
-    # yamllint disable-line rule:line-length
-    uses: fabriciofx/github-workflows/.github/workflows/python-release-template.yml@main
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+      - name: Install uv
+        working-directory: ${{ inputs.working-directory }}
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Build package
+        working-directory: ${{ inputs.working-directory }}
+        run: |
+          if [[ -s uv.lock ]]; then
+            uv build
+          else
+            python -m build
+          fi
+      - name: Release to PyPI
+        uses: pypa/gh-action-pypi-publish@3317ede93a4981d0fc490510c6fcf8bf0e92ed05
+        with:
+          packages-dir: ${{ inputs.working-directory }}
+          verbose: true
