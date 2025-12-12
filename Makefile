@@ -23,7 +23,7 @@
 PLANTUML=plantuml
 PLANTUML_OPTS = -tsvg
 
-.PHONY: install tests lint format diagrams clean
+.PHONY: install tests lint format diagrams build clean
 
 install:
 	uv sync
@@ -41,6 +41,9 @@ format:
 
 diagrams:
 	$(PLANTUML) $(PLANTUML_OPTS) docs/*.puml
+
+build:
+	uv build
 
 clean:
 	rm -rf .venv dist *.egg-info
