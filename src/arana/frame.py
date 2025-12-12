@@ -21,7 +21,7 @@
 # SOFTWARE.
 from abc import ABC, abstractmethod
 from re import Pattern
-from typing import cast, Any
+from typing import Any, cast
 
 from playwright.sync_api import FrameLocator
 
@@ -59,7 +59,7 @@ class PwFrame(Frame):
         self, role: str, *, name: str | Pattern[str] | None = None
     ) -> Element:
         return PwElement(
-            self.__frame.get_by_role(role=cast(Any, role), name=name)
+            self.__frame.get_by_role(role=cast("Any", role), name=name)
         )
 
     def by_test_id(self, test_id: str) -> Element:

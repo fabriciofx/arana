@@ -19,11 +19,15 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+# pyright: reportMissingTypeStubs=none
+# pyright: reportUnknownVariableType=none
+# pyright: reportUnknownMemberType=none
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta, timezone
 
-from browserforge.fingerprints import FingerprintGenerator # type: ignore
-from browserforge.injectors.playwright import NewContext # type: ignore
+from browserforge.fingerprints import FingerprintGenerator
+from browserforge.injectors.playwright import NewContext
 from playwright.sync_api import Browser as Rocket
 
 from arana.console import Console, StdConsole
@@ -63,7 +67,7 @@ class PwPage(Page):
         self.__fingerprints = FingerprintGenerator()
         self.__session = NewContext(
             rocket,
-            fingerprint=self.__fingerprints.generate( # type: ignore
+            fingerprint=self.__fingerprints.generate(
                 browser=("chrome", "firefox", "safari", "edge"),
                 os=("windows", "macos", "linux"),
             ),
@@ -82,9 +86,10 @@ class PwPage(Page):
         resp = self.__pwpg.goto(self.__url)
         if resp is not None:
             return PwResponse(resp.status, PwHtml(self.__pwpg), self.__url)
+        return None
 
     def pause(self) -> None:
-        self.__pwpg.wait_for_event("close", timeout=0) # type: ignore
+        self.__pwpg.wait_for_event("close", timeout=0)
 
     def close(self) -> None:
         self.__pwpg.close()
@@ -94,6 +99,7 @@ class PwPage(Page):
         resp = self.__pwpg.reload()
         if resp is not None:
             return PwResponse(resp.status, PwHtml(self.__pwpg), self.__url)
+        return None
 
     def scroll(self, random_wait: RandomWait) -> bool:
         random_int = RandomInt()
