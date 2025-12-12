@@ -27,6 +27,12 @@ dev = [
     "pytest-xdist>=3.8.0",
 ]
 
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"arana" = ["py.typed"]
+
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
