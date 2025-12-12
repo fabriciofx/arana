@@ -22,8 +22,8 @@
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta, timezone
 
-from browserforge.fingerprints import FingerprintGenerator
-from browserforge.injectors.playwright import NewContext
+from browserforge.fingerprints import FingerprintGenerator # type: ignore
+from browserforge.injectors.playwright import NewContext # type: ignore
 from playwright.sync_api import Browser as Rocket
 
 from arana.console import Console, StdConsole
@@ -38,7 +38,7 @@ class Page(ABC):
         pass
 
     @abstractmethod
-    def open(self) -> Response:
+    def open(self) -> Response | None:
         pass
 
     @abstractmethod
@@ -50,7 +50,7 @@ class Page(ABC):
         pass
 
     @abstractmethod
-    def reload(self) -> Response:
+    def reload(self) -> Response | None:
         pass
 
     @abstractmethod
@@ -63,7 +63,7 @@ class PwPage(Page):
         self.__fingerprints = FingerprintGenerator()
         self.__session = NewContext(
             rocket,
-            fingerprint=self.__fingerprints.generate(
+            fingerprint=self.__fingerprints.generate( # type: ignore
                 browser=("chrome", "firefox", "safari", "edge"),
                 os=("windows", "macos", "linux"),
             ),
@@ -77,21 +77,23 @@ class PwPage(Page):
     def url(self) -> str:
         return self.__url
 
-    def open(self) -> Response:
+    def open(self) -> Response | None:
         self.__pwpg.wait_for_load_state()
         resp = self.__pwpg.goto(self.__url)
-        return PwResponse(resp.status, PwHtml(self.__pwpg), self.__url)
+        if resp is not None:
+            return PwResponse(resp.status, PwHtml(self.__pwpg), self.__url)
 
     def pause(self) -> None:
-        self.__pwpg.wait_for_event("close", timeout=0)
+        self.__pwpg.wait_for_event("close", timeout=0) # type: ignore
 
     def close(self) -> None:
         self.__pwpg.close()
         self.__session.close()
 
-    def reload(self) -> Response:
+    def reload(self) -> Response | None:
         resp = self.__pwpg.reload()
-        return PwResponse(resp.status, PwHtml(self.__pwpg), self.__url)
+        if resp is not None:
+            return PwResponse(resp.status, PwHtml(self.__pwpg), self.__url)
 
     def scroll(self, random_wait: RandomWait) -> bool:
         random_int = RandomInt()
@@ -122,7 +124,7 @@ class Logged(Page):
     def url(self) -> str:
         return self.__origin.url()
 
-    def open(self) -> Response:
+    def open(self) -> Response | None:
         zone = timezone(timedelta(hours=-3))
         timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
         self.__console.log(f"[{timestamp}] Opening '{self.url()}'... ")
@@ -143,7 +145,7 @@ class Logged(Page):
         self.__origin.close()
         self.__console.logln("done.")
 
-    def reload(self) -> Response:
+    def reload(self) -> Response | None:
         zone = timezone(timedelta(hours=-3))
         timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
         self.__console.log(f"[{timestamp}] Reloading '{self.url()}'... ")
@@ -174,7 +176,8 @@ class Retry(Page):
     def url(self) -> str:
         return self.__origin.url()
 
-    def open(self) -> Response:
+    def open(self) -> Response | None:
+        response: Response | None
         try:
             response = self.__origin.open()
         except Exception:
@@ -196,7 +199,7 @@ class Retry(Page):
     def close(self) -> None:
         self.__origin.close()
 
-    def reload(self) -> Response:
+    def reload(self) -> Response | None:
         return self.__origin.reload()
 
     def scroll(self, random_wait: RandomWait) -> bool:

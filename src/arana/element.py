@@ -86,4 +86,7 @@ class PwElement(Element):
         return PwElement(self.__locator.nth(index))
 
     def attribute(self, name: str) -> str:
-        return self.__locator.get_attribute(name)
+        attribute: str | None = self.__locator.get_attribute(name)
+        if attribute is None:
+            attribute = ""
+        return attribute

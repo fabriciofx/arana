@@ -88,18 +88,19 @@ class Retry(Content):
         return self.__origin.url()
 
     def refine(self, response: Response) -> dict[str, Any]:
-        data = None
+        data: dict[str, Any] = {}
         try:
             data = self.__origin.refine(response)
         except Exception:
             retries = 1
-            while data is None and retries <= self.__max_retries:
+            while len(data) == 0 and retries <= self.__max_retries:
                 self.__random_wait.run()
                 try:
                     url = self.__origin.url()
                     page = self.__browser.page(url)
                     resp = page.open()
-                    data = self.__origin.refine(resp)
+                    if resp is not None:
+                        data = self.__origin.refine(resp)
                     page.close()
                 except Exception:
                     retries += 1
