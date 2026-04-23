@@ -14,7 +14,7 @@ wheels = [
 [[package]]
 name = "arana"
 version = "0.0.13"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "browserforge" },
     { name = "playwright" },
