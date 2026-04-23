@@ -3,7 +3,7 @@
 
 [project]
 name = "arana"
-version = "0.0.14"
+version = "0.0.15"
 description = "Abstraction layer for web scrapers"
 authors = [{ name = "Fabrício Barros Cabral", email = "fabriciofx@gmail.com" }]
 readme = "README.md"
