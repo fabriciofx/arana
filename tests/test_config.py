@@ -19,11 +19,13 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+from typing import Any
+
 from arana.config import FakeConfig
 
 
 def test_load() -> None:
-    data = {"code": 10, "pages": [5, 3, 7, 9, 2, 56, 8, 19]}
+    data: dict[str, Any] = {"code": 10, "pages": [5, 3, 7, 9, 2, 56, 8, 19]}
     config = FakeConfig(data)
     params = config.load()
     assert params == data
