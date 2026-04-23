@@ -29,13 +29,13 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "browserforge", specifier = ">=1.2.3" },
-    { name = "playwright", specifier = ">=1.56.0" },
+    { name = "browserforge", specifier = ">=1.2.4" },
+    { name = "playwright", specifier = ">=1.58.0" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "fake-https-server", specifier = ">=0.0.8" },
+    { name = "fake-https-server", specifier = ">=0.0.12" },
     { name = "pytest-playwright", specifier = ">=0.7.2" },
     { name = "pytest-xdist", specifier = ">=3.8.0" },
 ]

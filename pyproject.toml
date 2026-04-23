@@ -17,7 +17,7 @@ keywords = [
     "scraping",
     "browserforge",
 ]
-dependencies = ["browserforge>=1.2.3", "playwright>=1.56.0"]
+dependencies = ["browserforge>=1.2.4", "playwright>=1.58.0"]
 
 [project.urls]
 homepage = "https://github.com/fabriciofx/arana"
@@ -25,7 +25,7 @@ bug-tracker = "https://github.com/fabriciofx/arana/issues"
 
 [dependency-groups]
 dev = [
-    "fake-https-server>=0.0.8",
+    "fake-https-server>=0.0.12",
     "pytest-playwright>=0.7.2",
     "pytest-xdist>=3.8.0",
 ]
