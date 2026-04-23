@@ -25,7 +25,7 @@ bug-tracker = "https://github.com/fabriciofx/arana/issues"
 
 [dependency-groups]
 dev = [
-    "fake-https-server>=0.0.12",
+    "fake-https-server>=0.0.13",
     "pytest-playwright>=0.7.2",
     "pytest-xdist>=3.8.0",
 ]
