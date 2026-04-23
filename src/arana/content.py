@@ -70,6 +70,7 @@ class Retry(Content):
 
     def refine(self, response: Response) -> dict[str, Any]:
         data: dict[str, Any] = {}
+        status_ok = 200
         try:
             data = self.__origin.refine(response)
         except Exception:
@@ -80,7 +81,7 @@ class Retry(Content):
                     url = self.__origin.url()
                     page = self.__browser.page(url)
                     resp = page.open()
-                    if resp.status() == 200:
+                    if resp.status() == status_ok:
                         data = self.__origin.refine(resp)
                     page.close()
                 except Exception:
