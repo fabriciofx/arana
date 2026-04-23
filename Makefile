@@ -4,18 +4,19 @@
 PLANTUML=plantuml
 PLANTUML_OPTS = -tsvg
 
-.PHONY: install tests lint format diagrams build clean
+.PHONY: install test check format diagrams dist upgrade clean
 
 install:
 	uv sync
 	uv run playwright install-deps
 	uv run playwright install
 
-tests:
+test:
 	uv run pytest
 
-lint:
+check:
 	uv run ruff check .
+	uv run zuban check
 
 format:
 	uv run ruff format .
@@ -23,8 +24,11 @@ format:
 diagrams:
 	$(PLANTUML) $(PLANTUML_OPTS) docs/*.puml
 
-build:
+dist: check test
 	uv build
+
+upgrade:
+	uv sync --upgrade
 
 clean:
 	rm -rf .venv dist *.egg-info
