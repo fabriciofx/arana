@@ -21,7 +21,7 @@
 # SOFTWARE.
 from abc import ABC, abstractmethod
 
-from arana.html import Html
+from arana.html import Html, PlainHtml
 
 
 class Response(ABC):
@@ -49,6 +49,20 @@ class PwResponse(Response):
 
     def html(self) -> Html:
         return self.__html
+
+    def url(self) -> str:
+        return self.__url
+
+
+class NotFoundResponse(Response):
+    def __init__(self, url: str) -> None:
+        self.__url = url
+
+    def status(self) -> int:
+        return 404
+
+    def html(self) -> Html:
+        return PlainHtml("<html><body><h1>Not Found</h1></body></html>")
 
     def url(self) -> str:
         return self.__url

@@ -32,7 +32,7 @@ from playwright.sync_api import Browser as Rocket
 
 from arana.console import Console, StdConsole
 from arana.html import PwHtml
-from arana.response import PwResponse, Response
+from arana.response import NotFoundResponse, PwResponse, Response
 from arana.rndm import RandomInt, RandomWait
 
 
@@ -42,7 +42,7 @@ class Page(ABC):
         pass
 
     @abstractmethod
-    def open(self) -> Response | None:
+    def open(self) -> Response:
         pass
 
     @abstractmethod
@@ -81,12 +81,12 @@ class PwPage(Page):
     def url(self) -> str:
         return self.__url
 
-    def open(self) -> Response | None:
+    def open(self) -> Response:
         self.__pwpg.wait_for_load_state()
         resp = self.__pwpg.goto(self.__url)
         if resp is not None:
             return PwResponse(resp.status, PwHtml(self.__pwpg), self.__url)
-        return None
+        return NotFoundResponse(self.__url)
 
     def pause(self) -> None:
         self.__pwpg.wait_for_event("close", timeout=0)
@@ -130,7 +130,7 @@ class Logged(Page):
     def url(self) -> str:
         return self.__origin.url()
 
-    def open(self) -> Response | None:
+    def open(self) -> Response:
         zone = timezone(timedelta(hours=-3))
         timestamp = datetime.now(zone).strftime("%H:%M:%S.%f")
         self.__console.log(f"[{timestamp}] Opening '{self.url()}'... ")
@@ -182,7 +182,7 @@ class Retry(Page):
     def url(self) -> str:
         return self.__origin.url()
 
-    def open(self) -> Response | None:
+    def open(self) -> Response:
         response: Response | None
         try:
             response = self.__origin.open()
@@ -197,6 +197,8 @@ class Retry(Page):
                     retries += 1
                     continue
                 break
+        if response is None:
+            return NotFoundResponse(self.url())
         return response
 
     def pause(self) -> None:

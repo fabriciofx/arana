@@ -86,3 +86,35 @@ class PwHtml(Html):
 
     def frame(self, selector: str) -> Frame:
         return PwFrame(self.__pwpg.frame_locator(selector))
+
+
+class PlainHtml(Html):
+    def __init__(self, content: str) -> None:
+        self.__content = content
+
+    def element(
+        self, selector: str, *, has_text: str | Pattern[str] | None = None
+    ) -> Element:
+        msg = "PlainHtml does not support element()"
+        raise NotImplementedError(msg)
+
+    def by_role(
+        self, role: str, *, name: str | Pattern[str] | None = None
+    ) -> Element:
+        msg = "PlainHtml does not support by_role()"
+        raise NotImplementedError(msg)
+
+    def by_test_id(self, test_id: str) -> Element:
+        msg = "PlainHtml does not support by_test_id()"
+        raise NotImplementedError(msg)
+
+    def content(self) -> str:
+        return self.__content
+
+    def evaluate(self, expression: str) -> Any:
+        msg = "PlainHtml does not support evaluate()"
+        raise NotImplementedError(msg)
+
+    def frame(self, selector: str) -> Frame:
+        msg = "PlainHtml does not support frame()"
+        raise NotImplementedError(msg)
