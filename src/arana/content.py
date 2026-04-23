@@ -80,7 +80,7 @@ class Retry(Content):
                     url = self.__origin.url()
                     page = self.__browser.page(url)
                     resp = page.open()
-                    if resp is not None:
+                    if resp.status() == 200:
                         data = self.__origin.refine(resp)
                     page.close()
                 except Exception:
